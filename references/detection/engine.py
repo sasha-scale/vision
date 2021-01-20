@@ -81,7 +81,7 @@ def evaluate(model, data_loader, device):
     iou_types = _get_iou_types(model)
     coco_evaluator = CocoEvaluator(coco, iou_types)
 
-    for images, targets in metric_logger.log_every(data_loader, 100, header):
+    for images, targets, image_names in metric_logger.log_every(data_loader, 100, header):
         images = list(img.to(device) for img in images)
 
         torch.cuda.synchronize()
