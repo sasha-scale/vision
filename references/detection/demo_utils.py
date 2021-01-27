@@ -44,6 +44,27 @@ def draw_prediction(img, prediction):
 
     return img_final
 
+def get_color_overlay(segmentation_mask):
+  sz = segmentation_mask.size
+  segmentation_mask = np.array(segmentation_mask)
+  img = Image.new("RGB",sz)
+  for i in range(sz[1]): #img.size[0]): # for every pixel:
+    for j in range(sz[0]): #range(img.size[0]):
+        if segmentation_mask[i,j] == 0:
+          # change to black if not red
+          img.putpixel((j,i), (255, 0 ,0))
+        elif segmentation_mask[i,j] == 1:
+          img.putpixel((j,i), (0, 0, 255))
+  return img
+
+def draw_segmentation_masks(mask_path, img_path):
+    colors = ['red', 'blue', 'green', 'purple', 'pink']
+    #Open Image
+    img = Image.open(img_path)
+    segmentation_mask = Image.open(mask_path)
+    overlay = get_color_overlay(segmentation_mask)
+    return Image.blend(img, overlay, 0.4)
+
 def draw_bounding_boxes(mask_path, img_path):
     colors = ['red', 'blue', 'green', 'purple', 'pink']
     #Open Image
